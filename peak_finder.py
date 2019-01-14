@@ -27,10 +27,10 @@ def display_results(results, num_results = 5):
   for i, peak in enumerate(sorted(results.items(), key=operator.itemgetter(0)), 1):
     print('{}. {} ({} mi)'.format(i, peak[1]['name'], round(peak[0], 1)))
     if i == num_results:
-      print('\nOnly displaying top {} results.'.format(num_results))
+      print('\nNote: Only displaying top {} results.\n'.format(num_results))
       return
 
-  print('\nOnly displaying top {} results.'.format(num_results))
+  print('\nNote: Only displaying top {} results.\n'.format(num_results))
 
 def find_nearest_peak(min_range = 5, max_range = 100, range_inc = 5):
   # Set-up API
