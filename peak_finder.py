@@ -6,23 +6,11 @@ import overpass
 api = overpass.API()
 
 # Get Current Location
-location = "California"
+current_location = "" #Turn location into bounding box
+bbox = "5.53, 47.23, 15.38, 54.96" #
 
 # Query for nearest Mountain Ranges
-overpass_query = api.get("""
- area
-  [place=state]
-  //["region:type"="mountain_area"]
-  ["name:en"="{}"];
-out meta;
-
-// get all peaks in the area
-node
-  [natural=peak]
-  (area);
-out meta;
- 
- """.format(location))
+overpass_query = api.get("node({})[natural=peak];".format(bbox))
 
 # Format and Display Results
 for feature in overpass_query['features']:
