@@ -1,10 +1,13 @@
 from geopy import distance
 import overpass
 import operator
+import geocoder
+
 
 def get_current_location():
-  current_location = (33.671039, -117.910602)
-  return current_location
+  g = geocoder.ip('me')
+  return tuple(g.latlng)
+
 
 def format_results(results, current_location):
   formatted_results = {}
