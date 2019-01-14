@@ -17,4 +17,5 @@ Install the following Modules
 ## Acknowledgments
 
 * The examples on this page were extremely helpful in figuring out how to write an Overpass query http://osmlab.github.io/learnoverpass/en/docs/filters/area/
+* Finding the distance between two coordinates https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude
 
