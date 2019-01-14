@@ -1,29 +1,32 @@
-import overpy 
+import json
+import requests
+import overpass
 
 # Set-up API
-api = overpy.Overpass()
+api = overpass.API()
 
 # Get Current Location
 location = "California"
 
 # Query for nearest Mountain Ranges
-result = api.query("""
-area
+overpass_query = api.get("""
+ area
   [place=state]
   //["region:type"="mountain_area"]
   ["name:en"="{}"];
-out body;
+out meta;
 
 // get all peaks in the area
 node
   [natural=peak]
   (area);
-out body qt;
-""".format(location))
+out meta;
+ 
+ """.format(location))
 
-# Format Results
-
-# Display Results
-print(result)
-print(len(result.nodes))
-print(result.nodes)
+# Format and Display Results
+for feature in overpass_query['features']:
+  try:
+    print(feature['properties']['name'])
+  except KeyError:
+    print('No Peak name')
