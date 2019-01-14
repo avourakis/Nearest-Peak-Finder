@@ -1,21 +1,36 @@
-import json
-import requests
+from geopy import distance
 import overpass
+import operator
 
 def get_current_location():
-  current_location = "33.671039, -117.910602"
+  current_location = (33.671039, -117.910602)
   return current_location
 
-def display_results(results):
-  # Format and Display Results
+def format_results(results, current_location):
+  formatted_results = {}
+
   for feature in results['features']:
     try:
-      coordinates = feature["geometry"]["coordinates"]
+      node_id = feature["id"]
+      coordinates = tuple(reversed(feature["geometry"]["coordinates"]))
       peak_name = feature['properties']['name']
-      print(peak_name)
-      print(coordinates)
+      dist = distance.geodesic(current_location, coordinates).miles
+      formatted_results[dist] = {"name": peak_name, "coordinates": coordinates, "id": node_id}
     except KeyError:
       pass
+
+  return formatted_results
+
+def display_results(results, num_results = 5):
+  # Format and Display Results
+  print('\nMountain Peaks Near You:\n')
+  for i, peak in enumerate(sorted(results.items(), key=operator.itemgetter(0)), 1):
+    print('{}. {} ({} mi)'.format(i, peak[1]['name'], round(peak[0], 1)))
+    if i == num_results:
+      print('\nOnly displaying top {} results.'.format(num_results))
+      return
+
+  print('\nOnly displaying top {} results.'.format(num_results))
 
 def find_nearest_peak(min_range = 5, max_range = 100, range_inc = 5):
   # Set-up API
@@ -26,13 +41,11 @@ def find_nearest_peak(min_range = 5, max_range = 100, range_inc = 5):
 
   # Query for nearest Mountain Ranges
   for radius in range(min_range, max_range, range_inc):
-    print(radius)
 
-    overpass_query = api.get("node(around:{}, {})[natural=peak];".format(radius*1609.344, current_location))
+    overpass_query = api.get("node(around:{}, {})[natural=peak];".format(radius*1609.344, ', '.join(str(v) for v in current_location)))
     if len(overpass_query['features']) > 1:
-      display_results(overpass_query)
+      display_results(format_results(overpass_query, current_location))
       return
-
     elif radius == max_range:
       print("No Peaks found within {} mile radius".format(max_range))
 
