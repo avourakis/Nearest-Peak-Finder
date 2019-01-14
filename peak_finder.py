@@ -27,6 +27,9 @@ out meta;
 # Format and Display Results
 for feature in overpass_query['features']:
   try:
-    print(feature['properties']['name'])
+    coordinates = feature["geometry"]["coordinates"]
+    peak_name = feature['properties']['name']
+    print(peak_name)
+    print(coordinates)
   except KeyError:
-    print('No Peak name')
+    pass
