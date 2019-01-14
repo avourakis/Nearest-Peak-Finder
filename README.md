@@ -12,6 +12,7 @@ Install the following Modules
 
 1. Geopy
 2. Overpass API
+3. Geocoder
 
 ## Acknowledgments
 
