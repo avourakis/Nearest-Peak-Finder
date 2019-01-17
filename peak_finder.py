@@ -8,7 +8,6 @@ def get_current_location():
   g = geocoder.ip('me')
   return tuple(g.latlng)
 
-
 def format_results(results, current_location):
   formatted_results = {}
 
@@ -28,7 +27,7 @@ def display_results(results, num_results = 5):
   # Format and Display Results
   print('\nMountain Peaks Near You:\n')
   for i, peak in enumerate(sorted(results.items(), key=operator.itemgetter(0)), 1):
-    print('{}. {} ({} mi)'.format(i, peak[1]['name'], round(peak[0], 1)))
+    print('{}. {} ({} mi): {}, {}'.format(i, peak[1]['name'], round(peak[0], 1), peak[1]['coordinates'][0], peak[1]['coordinates'][1]))
     if i == num_results:
       print('\nNote: Only displaying top {} results.\n'.format(num_results))
       return
